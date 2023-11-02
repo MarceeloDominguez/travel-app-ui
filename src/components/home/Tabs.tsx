@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
   containerTabs: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: 10,
   },
   tabs: {
     flexDirection: 'row',
