@@ -6,15 +6,27 @@ import {
   Image,
   Dimensions,
   Animated,
+  TouchableOpacity,
 } from 'react-native';
+import {Data} from '../../interface/dataInterface';
+import {COLORS, FONTS} from '../../util/constants';
+import LinearGradient from 'react-native-linear-gradient';
 
 const {width} = Dimensions.get('window');
 
 const ITEM_SIZE = width * 0.6;
 
-export default function Carousel() {
+type Props = {
+  data: Data[];
+};
+
+export default function Carousel({data}: Props) {
   const scrollX = useRef(new Animated.Value(0)).current;
-  const DATA = [{key: 'left-spacer'}, ...Array(10), {key: 'right-spacer'}];
+  const DATA = [
+    {key: 'left-spacer'} as any,
+    ...data,
+    {key: 'right-spacer'} as any,
+  ];
 
   return (
     <View>
@@ -30,7 +42,7 @@ export default function Carousel() {
           {useNativeDriver: true},
         )}>
         <View style={styles.containerCarousel}>
-          {DATA.map((item, index) => {
+          {DATA.map((item: Data, index) => {
             if (index === 0 || index === DATA.length - 1) {
               return <View key={index} style={styles.spacerList} />;
             }
@@ -58,14 +70,28 @@ export default function Carousel() {
                   styles.containerImage,
                   {opacity, transform: [{translateY}]},
                 ]}>
-                <View style={styles.wrapperPoste}>
+                <TouchableOpacity
+                  style={styles.wrapperPoste}
+                  activeOpacity={0.9}>
                   <Image
                     style={styles.posterImage}
-                    source={{
-                      uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbKuLTZsfAauhM7jFEL7FNMzVUfdeaeVe0pA&usqp=CAU',
-                    }}
+                    source={{uri: item.image}}
                   />
-                </View>
+                  <View style={styles.wrapperNameEndPrice}>
+                    <Text numberOfLines={1} style={styles.name}>
+                      {item.name}
+                    </Text>
+                    <Text style={styles.price}>
+                      ${item.pricePerNight} - Per Night
+                    </Text>
+                  </View>
+                  <LinearGradient
+                    start={{x: 1, y: 0}}
+                    end={{x: 1, y: 1}}
+                    colors={['transparent', 'rgba(0,0,0,0.6)']}
+                    style={styles.viewTransparentCard}
+                  />
+                </TouchableOpacity>
               </Animated.View>
             );
           })}
@@ -83,7 +109,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   spacerList: {
-    height: 300,
+    height: 280,
     width: (width - ITEM_SIZE) / 2,
   },
   containerImage: {
@@ -95,7 +121,32 @@ const styles = StyleSheet.create({
   },
   posterImage: {
     width: '100%',
-    height: 300,
+    height: 280,
+    borderRadius: 20,
+  },
+  wrapperNameEndPrice: {
+    position: 'absolute',
+    bottom: 10,
+    left: 16,
+  },
+  name: {
+    color: COLORS.primary,
+    fontFamily: FONTS.bold,
+    fontSize: 14,
+    marginBottom: 5,
+    maxWidth: ITEM_SIZE * 0.7,
+    zIndex: 1,
+  },
+  price: {
+    color: COLORS.primary,
+    fontFamily: FONTS.regular,
+    fontSize: 13,
+    zIndex: 1,
+  },
+  viewTransparentCard: {
+    position: 'absolute',
+    height: 280,
+    width: '100%',
     borderRadius: 20,
   },
 });
