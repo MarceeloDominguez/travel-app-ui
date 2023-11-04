@@ -11,6 +11,9 @@ import {
 import {Data} from '../../interface/dataInterface';
 import {COLORS, FONTS} from '../../util/constants';
 import LinearGradient from 'react-native-linear-gradient';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamsList} from '../../navigation/navigation';
 
 const {width} = Dimensions.get('window');
 
@@ -21,6 +24,9 @@ type Props = {
 };
 
 export default function Carousel({data}: Props) {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
+
   const scrollX = useRef(new Animated.Value(0)).current;
   const DATA = [
     {key: 'left-spacer'} as any,
@@ -72,7 +78,8 @@ export default function Carousel({data}: Props) {
                 ]}>
                 <TouchableOpacity
                   style={styles.wrapperPoste}
-                  activeOpacity={0.9}>
+                  activeOpacity={0.9}
+                  onPress={() => navigation.navigate('DetailsScreen', {item})}>
                   <Image
                     style={styles.posterImage}
                     source={{uri: item.image}}
