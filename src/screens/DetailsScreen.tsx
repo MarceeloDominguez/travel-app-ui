@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   ScrollView,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamsList} from '../navigation/navigation';
@@ -14,18 +15,29 @@ import {COLORS, FONTS} from '../util/constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 import StayInformation from '../components/details/StayInformation';
 import Facilities from '../components/details/Facilities';
+import Price from '../components/details/Price';
 
 type Props = NativeStackScreenProps<RootStackParamsList, 'DetailsScreen'>;
 
 const {width: WIDTH_SCREEN} = Dimensions.get('window');
 
-export default function DetailsScreen({route}: Props) {
+export default function DetailsScreen({route, navigation}: Props) {
   const {item} = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Image source={{uri: item.image}} style={styles.image} />
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          activeOpacity={0.9}
+          style={styles.buttonBack}>
+          <Icon
+            name="chevron-back-outline"
+            color={COLORS.secondary}
+            size={24}
+          />
+        </TouchableOpacity>
         <View style={styles.contentContainer}>
           <View style={styles.wrapperNameEndIconHeart}>
             <Text style={styles.name} numberOfLines={1}>
@@ -40,6 +52,7 @@ export default function DetailsScreen({route}: Props) {
           <View style={styles.lineSeparator} />
           <StayInformation />
           <Facilities />
+          <Price pricePerNight={item.pricePerNight} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -53,7 +66,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: WIDTH_SCREEN,
-    height: WIDTH_SCREEN * 1.1,
+    height: WIDTH_SCREEN * 0.9,
   },
   contentContainer: {
     backgroundColor: COLORS.primary,
@@ -94,5 +107,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#7A869A26',
     height: 1,
     marginVertical: 15,
+  },
+  buttonBack: {
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    position: 'absolute',
+    top: 20,
+    left: 22,
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
   },
 });
