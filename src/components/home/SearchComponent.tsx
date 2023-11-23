@@ -1,10 +1,19 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {COLORS, FONTS} from '../../util/constants';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamsList} from '../../navigation/navigation';
 
 export default function SearchComponent() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamsList>>();
+
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={0.9}>
+    <TouchableOpacity
+      style={styles.container}
+      activeOpacity={0.9}
+      onPress={() => navigation.navigate('SearchScreen')}>
       <View style={styles.wrapperTextEndIcon}>
         <Text style={styles.text}>Search your hotel</Text>
         <Image
@@ -18,7 +27,7 @@ export default function SearchComponent() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#e2e2e9',
+    backgroundColor: COLORS.textThird,
     marginHorizontal: 22,
     height: 40,
     borderRadius: 20,
