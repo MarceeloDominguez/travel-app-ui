@@ -10,9 +10,17 @@ import ListHotelsScreen from '../screens/ListHotelsScreen';
 
 export type RootStackParamsList = {
   HomeScreen: undefined;
-  DetailsScreen: {item: Data};
+  DetailsScreen: {
+    item: Data;
+    formatDateCheckIn?: string;
+    formatDateCheckOut?: string;
+  };
   SearchScreen: undefined;
-  ListHotelsScreen: undefined;
+  ListHotelsScreen: {
+    searchHotels: Data[];
+    formatDateCheckIn: string;
+    formatDateCheckOut: string;
+  };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamsList>();

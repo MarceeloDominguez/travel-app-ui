@@ -16,13 +16,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StayInformation from '../components/details/StayInformation';
 import Facilities from '../components/details/Facilities';
 import Price from '../components/details/Price';
+import Overview from '../components/details/Overview';
 
 type Props = NativeStackScreenProps<RootStackParamsList, 'DetailsScreen'>;
 
 const {width: WIDTH_SCREEN} = Dimensions.get('window');
 
 export default function DetailsScreen({route, navigation}: Props) {
-  const {item} = route.params;
+  const {item, formatDateCheckIn, formatDateCheckOut} = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,12 +46,33 @@ export default function DetailsScreen({route, navigation}: Props) {
             </Text>
             <Icon name="heart" size={20} color={COLORS.textSecondary} />
           </View>
-          <View style={styles.containerRating}>
-            <Icon name="star" size={12} color={COLORS.primary} />
-            <Text style={styles.rating}>{item.rating}</Text>
+          <View style={styles.wrapperRatingLocation}>
+            <View style={styles.containerRating}>
+              <Icon name="star" size={12} color={COLORS.primary} />
+              <Text style={styles.rating}>{item.rating}</Text>
+            </View>
+            <View style={styles.containerLocation}>
+              <Icon
+                name="location-outline"
+                size={15}
+                color={COLORS.textPrimary}
+              />
+              <Text numberOfLines={1} style={styles.location}>
+                {item.location}
+              </Text>
+            </View>
           </View>
           <View style={styles.lineSeparator} />
-          <StayInformation />
+          {formatDateCheckIn || formatDateCheckOut ? (
+            <StayInformation
+              formatDateCheckIn={formatDateCheckIn!}
+              formatDateCheckOut={formatDateCheckOut!}
+              room={item.room}
+              maxPerson={item.maxPerson}
+            />
+          ) : (
+            <Overview overview={item.overview} />
+          )}
           <Facilities />
           <Price pricePerNight={item.pricePerNight} />
         </View>
@@ -86,6 +108,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     letterSpacing: 0.2,
   },
+  wrapperRatingLocation: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   containerRating: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -96,6 +123,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 8,
     marginVertical: 10,
+    flex: 1,
   },
   rating: {
     fontSize: 12,
@@ -103,10 +131,21 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     marginTop: 3,
   },
+  containerLocation: {
+    flexDirection: 'row',
+    gap: 5,
+    alignItems: 'center',
+  },
+  location: {
+    fontFamily: FONTS.regular,
+    color: COLORS.textPrimary,
+    marginTop: 4,
+    fontSize: 13,
+  },
   lineSeparator: {
     backgroundColor: '#7A869A26',
     height: 1,
-    marginVertical: 15,
+    marginVertical: 10,
   },
   buttonBack: {
     backgroundColor: 'rgba(255, 255, 255, 0.7)',

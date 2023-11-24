@@ -16,6 +16,7 @@ import Amount from '../components/Amount';
 import SelectAmount from '../components/SelectAmount';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamsList} from '../navigation/navigation';
+import {DATA} from '../data/data';
 
 type Props = NativeStackScreenProps<RootStackParamsList>;
 
@@ -30,6 +31,10 @@ export default function SearchScreen({navigation}: Props) {
 
   const formatDateCheckIn = checkInDate.toFormat('EEE, dd LLL');
   const formatDateCheckOut = checkOutDate.toFormat('EEE, dd LLL');
+
+  const searchHotels = DATA.filter(
+    item => item.maxPerson >= amountPerson && item.room >= amountRoom,
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -85,8 +90,23 @@ export default function SearchScreen({navigation}: Props) {
         </View>
         <TouchableOpacity
           activeOpacity={0.9}
-          style={styles.button}
-          onPress={() => navigation.navigate('ListHotelsScreen')}>
+          style={[
+            styles.button,
+            {
+              opacity:
+                selectedCheckIn === '' || selectedCheckOut === '' ? 0.5 : 1,
+            },
+          ]}
+          disabled={
+            selectedCheckIn === '' || selectedCheckOut === '' ? true : false
+          }
+          onPress={() =>
+            navigation.navigate('ListHotelsScreen', {
+              searchHotels,
+              formatDateCheckIn,
+              formatDateCheckOut,
+            })
+          }>
           <Text style={styles.textButton}>Search</Text>
         </TouchableOpacity>
       </ScrollView>

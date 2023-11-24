@@ -7,4 +7,7 @@ export interface Data {
   id: number;
   category: string;
   pricePerNight: number;
+  maxPerson: number;
+  room: number;
+  overview: string;
 }
