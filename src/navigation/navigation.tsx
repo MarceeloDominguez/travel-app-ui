@@ -7,8 +7,10 @@ import HomeScreen from '../screens/HomeScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ListHotelsScreen from '../screens/ListHotelsScreen';
+import OnboardingScreen from '../screens/OnboardingScreen';
 
 export type RootStackParamsList = {
+  OnboardingScreen: undefined;
   HomeScreen: undefined;
   DetailsScreen: {
     item: Data;
@@ -29,6 +31,11 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{animation: 'fade'}}>
+        <Stack.Screen
+          name="OnboardingScreen"
+          component={OnboardingScreen}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="HomeScreen"
           component={HomeScreen}
