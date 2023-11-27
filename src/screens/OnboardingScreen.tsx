@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, ViewToken, Text, Dimensions} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ViewToken,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import {onboardingData} from '../data/onboardingData';
 import RenderItem from '../components/onboarding/RenderItem';
 import Animated, {
@@ -10,16 +17,20 @@ import Animated, {
 } from 'react-native-reanimated';
 import Dot from '../components/onboarding/Dot';
 import {COLORS, FONTS} from '../util/constants';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamsList} from '../navigation/navigation';
 
 interface OnViewableItemsChangedInfo {
   viewableItems: ViewToken[];
 }
 
+type Props = NativeStackScreenProps<RootStackParamsList, 'OnboardingScreen'>;
+
 const {width} = Dimensions.get('window');
 
 const ITEM_WIDTH = width;
 
-export default function OnboardingScreen() {
+export default function OnboardingScreen({navigation}: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = React.useRef(null);
   const x = useSharedValue(0);
@@ -68,11 +79,6 @@ export default function OnboardingScreen() {
             );
           }}
           onScroll={onScroll}
-          // onViewableItemsChanged={onViewableItemsChanged}
-          // viewabilityConfig={{
-          //   minimumViewTime: 300,
-          //   viewAreaCoveragePercentThreshold: 10,
-          // }}
           viewabilityConfigCallbackPairs={
             viewabilityConfigCallbackPairs.current
           }
@@ -81,38 +87,29 @@ export default function OnboardingScreen() {
           )}
         />
       </View>
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 65,
-          flexDirection: 'row',
-          alignSelf: 'center',
-          gap: 10,
-        }}>
+      <View style={styles.containerDot}>
         {onboardingData.map((_, index) => (
           <Dot key={index} index={index} x={x} />
         ))}
       </View>
       {currentIndex === onboardingData.length - 1 && (
-        <Animated.View
-          entering={SlideInRight}
-          exiting={SlideOutRight}
-          style={{
-            position: 'absolute',
-            bottom: 57,
-            right: 22,
-          }}>
-          <Text
-            style={{
-              fontFamily: FONTS.bold,
-              fontSize: 18,
-              color: COLORS.textPrimary,
-              letterSpacing: 0.3,
-            }}>
-            Next
-          </Text>
-        </Animated.View>
+        <TouchableOpacity
+          style={styles.containerButtonNext}
+          activeOpacity={0.9}
+          onPress={() => navigation.navigate('HomeScreen')}>
+          <Animated.View entering={SlideInRight} exiting={SlideOutRight}>
+            <Text style={styles.textButtonNext}>Next</Text>
+          </Animated.View>
+        </TouchableOpacity>
       )}
+      <TouchableOpacity
+        style={styles.containerButtonSkip}
+        activeOpacity={0.9}
+        onPress={() => navigation.navigate('HomeScreen')}>
+        <View>
+          <Text style={styles.textButtonSkip}>Skip</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -127,5 +124,34 @@ const styles = StyleSheet.create({
   contentContainerStyle: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  containerDot: {
+    position: 'absolute',
+    bottom: 65,
+    flexDirection: 'row',
+    alignSelf: 'center',
+    gap: 10,
+  },
+  containerButtonNext: {
+    position: 'absolute',
+    bottom: 57,
+    right: 22,
+  },
+  textButtonNext: {
+    fontFamily: FONTS.bold,
+    fontSize: 18,
+    color: COLORS.textPrimary,
+    letterSpacing: 0.3,
+  },
+  containerButtonSkip: {
+    position: 'absolute',
+    top: 22,
+    right: 22,
+  },
+  textButtonSkip: {
+    fontFamily: FONTS.bold,
+    fontSize: 18,
+    color: COLORS.textPrimary,
+    letterSpacing: 0.3,
   },
 });

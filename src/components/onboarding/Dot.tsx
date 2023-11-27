@@ -7,7 +7,6 @@ import Animated, {
   interpolateColor,
   useAnimatedStyle,
 } from 'react-native-reanimated';
-import {COLORS} from '../../util/constants';
 
 type Props = {
   index: number;
