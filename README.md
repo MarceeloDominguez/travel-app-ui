@@ -3,6 +3,7 @@
 <table>
 <tr>
   <td><img src="https://github.com/MarceeloDominguez/travel-app-ui/assets/70117105/a3a2e471-38f9-4fbc-891b-324fdedf1c05" width="300"></td>
+  <td><img src="https://github.com/MarceeloDominguez/travel-app-ui/assets/70117105/dd4a49b4-b858-4a1c-87ce-a323ce84f199" width="300"></td>
 </tr>
 </table>
 
